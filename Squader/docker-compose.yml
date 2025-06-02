@@ -1,0 +1,35 @@
+services:
+  sqldb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqldb
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=root@123
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    restart: on-failure
+    ports:
+      - "5000:8080"
+      - "5001:8081"
+    depends_on:
+      - sqldb
+    environment:
+      - "Server=sqldb;Database=SquaderDb;User Id=sa;Password=root@123;Encrypt=False;TrustServerCertificate=True"
+  frontend:
+    build:
+      context: ../react-module
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:80"
+
+volumes:
+  sql_data:
