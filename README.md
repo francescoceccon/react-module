@@ -1,5 +1,3 @@
-# !Cógido esta disponivel na Master!
-
 ## Intruções...
 
 1) Clone o projeto na Branch master
